@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #define MAX_STUDENTS 100
 #define MAX_NAME_LENGTH 100
 struct Student {
@@ -48,11 +49,31 @@ void displayStudentDetails(struct Student student) {
     printf("Marks: %.2f\n", student.marks);
     printf("Email: %s\n", student.email);
 }
+int getIntegerInput() {
+    int value;
+    while (scanf("%d", &value) != 1 || value <= 0) {
+        printf("INVALID INPUT. Please enter a valid positive number: ");
+        while (getchar() != '\n');
+    }
+    return value;
+}
+float getFloatInput() {
+    float value;
+    while (scanf("%f", &value) != 1) {
+        printf("INVALID INPUT. Please enter a valid number: ");
+        while (getchar() != '\n');
+    }
+    return value;
+}
 int main() {
     struct Student students[MAX_STUDENTS];
     int n, i;
     printf("Enter number of students: ");
-    scanf("%d", &n);
+    n = getIntegerInput();
+    if (n <= 0) {
+        printf("INVALID INPUT. Number of students must be greater than 0.\n");
+        return 1;
+    }
     getchar();
     for (i = 0; i < n; i++) {
         printf("\nEnter details for student %d:\n", i + 1);
@@ -60,9 +81,9 @@ int main() {
         fgets(students[i].name, MAX_NAME_LENGTH, stdin);
         students[i].name[strcspn(students[i].name, "\n")] = '\0';
         printf("Enter roll number: ");
-        scanf("%d", &students[i].rollNo);
+        students[i].rollNo = getIntegerInput();
         printf("Enter marks: ");
-        scanf("%f", &students[i].marks);
+        students[i].marks = getFloatInput();
         getchar();
         createEmail(&students[i]);
     }
